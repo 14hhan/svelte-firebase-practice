@@ -8,7 +8,8 @@ svelte documentation: https://svelte.dev/docs
 firebase web documentation: https://firebase.google.com/docs/web/setup  
 [Svelte + Firebase = Sveltefire (and it is FIRE 🔥🔥🔥)](https://youtu.be/urDLn8RNlCA)
 
-## todo
-- [ ] Enable Google OAuth Login
-- [ ] Sign up with Google
+## todos
+- [x] Enable Google OAuth Login
+- [x] Sign up with Google
+- [ ] Routing
 - [ ] Sign up form
