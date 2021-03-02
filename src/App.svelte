@@ -8,14 +8,20 @@
   import "firebase/analytics";
 
   let firebaseConfig = {
-  // Insert Firebase Credentials here
+    apiKey: "AIzaSyD-i_gdYqrJxyCvLBeKPmge2f2fChpTc-A",
+    authDomain: "svelte-fireapp.firebaseapp.com",
+    projectId: "svelte-fireapp",
+    storageBucket: "svelte-fireapp.appspot.com",
+    messagingSenderId: "314930190957",
+    appId: "1:314930190957:web:0c6af4a35a1002abf4fd64",
   };
+
+  let provider = new firebase.auth.GoogleAuthProvider();
 
   firebase.initializeApp(firebaseConfig);
 </script>
 
 <main>
-
   {#if !firebaseConfig.projectId}
     <strong>Step 0</strong>
     Create a
@@ -27,14 +33,12 @@
 
   <!-- 1. 🔥 Firebase App -->
   <FirebaseApp {firebase}>
-
     <h1>💪🔥 Mode Activated</h1>
 
     <p>
       <strong>Tip:</strong>
       Open the browser console for development logging.
     </p>
-
 
     <!-- 2. 😀 Get the current user -->
     <User let:user let:auth>
@@ -44,9 +48,11 @@
       <button on:click={() => auth.signOut()}>Sign Out</button>
 
       <div slot="signed-out">
-
         <button on:click={() => auth.signInAnonymously()}>
           Sign In Anonymously
+        </button>
+        <button on:click={() => auth.signInWithRedirect(provider)}>
+          Sign In with Google
         </button>
       </div>
 
@@ -54,21 +60,23 @@
 
       <!-- 3. 📜 Get a Firestore document owned by a user -->
       <Doc path={`posts/${user.uid}`} let:data={post} let:ref={postRef} log>
-
         <h2>{post.title}</h2>
 
         <p>
-          Document
-          created at <em>{new Date(post.createdAt).toLocaleString()}</em>
+          Document created at <em
+            >{new Date(post.createdAt).toLocaleString()}</em
+          >
         </p>
 
         <span slot="loading">Loading post...</span>
         <span slot="fallback">
           <button
-            on:click={() => postRef.set({
-                title: '📜 I like Svelte',
-                createdAt: Date.now()
-              })}>
+            on:click={() =>
+              postRef.set({
+                title: "📜 I like Svelte",
+                createdAt: Date.now(),
+              })}
+          >
             Create Document
           </button>
         </span>
@@ -77,14 +85,14 @@
 
         <h3>Comments</h3>
         <Collection
-          path={postRef.collection('comments')}
-          query={ref => ref.orderBy('createdAt')}
+          path={postRef.collection("comments")}
+          query={(ref) => ref.orderBy("createdAt")}
           let:data={comments}
           let:ref={commentsRef}
-          log>
-
+          log
+        >
           {#if !comments.length}
-              No comments yet...
+            No comments yet...
           {/if}
 
           {#each comments as comment}
@@ -97,24 +105,22 @@
             </p>
           {/each}
 
-
           <button
-            on:click={() => commentsRef.add({
-                text: '💬 Me too!',
-                createdAt: Date.now()
-              })}>
+            on:click={() =>
+              commentsRef.add({
+                text: "💬 Me too!",
+                createdAt: Date.now(),
+              })}
+          >
             Add Comment
           </button>
 
           <span slot="loading">Loading comments...</span>
-
         </Collection>
       </Doc>
     </User>
   </FirebaseApp>
-
 </main>
-
 
 <!-- Styles -->
 <style>
